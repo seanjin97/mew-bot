@@ -1,4 +1,17 @@
-import { sendAnimation, sendReply } from "./utils";
+import { sendAnimationFromCache, sendReply } from "./utils";
+import { getCatGifUrls } from "./s3";
+import * as _ from "lodash";
+
+let CAT_GIF_URLS: string[];
+
+getCatGifUrls()
+  .then((res) => {
+    CAT_GIF_URLS = res;
+    console.log("mewbot cache initialised", CAT_GIF_URLS);
+  })
+  .catch((err) => {
+    console.log("UNABLE TO INITIALISE MEWBOT", err);
+  });
 
 exports.handler = async function (event: { body: string }) {
   console.log("request", JSON.stringify(event, undefined, 2));
@@ -8,20 +21,22 @@ exports.handler = async function (event: { body: string }) {
   const chatId = messageBody.message.chat.id;
   const command = messageBody.message.text;
 
+  const randomlyChosenGifUrl: string = _.sample(CAT_GIF_URLS)!;
+
   switch (command) {
-    case "/gimme":
+    case "/mew":
       await sendReply(chatId, "ok cutie, please wait xoxo");
-      await sendAnimation(chatId);
+      await sendAnimationFromCache(chatId, randomlyChosenGifUrl!);
       break;
-    case "/gimme@corrupted_mew_bot":
+    case "/mew@corrupted_mew_bot":
       await sendReply(chatId, "ok cutie, please wait xoxo");
-      await sendAnimation(chatId);
+      await sendAnimationFromCache(chatId, randomlyChosenGifUrl);
       break;
   }
 
   return {
     statusCode: 200,
     headers: { "Content-Type": "text/plain" },
-    body: `Hello there my boi, CDK! You've hit ${JSON.stringify(event)}\n`,
+    body: `You've hit mewbot`,
   };
 };

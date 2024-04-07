@@ -41,7 +41,7 @@ export async function getRandomCatGif(): Promise<string> {
   return _.sample(data.data).images.original.url;
 }
 
-export async function sendAnimation(chatId: string) {
+export async function sendAnimationFromAPI(chatId: string) {
   const data = JSON.stringify({
     chat_id: chatId,
     animation: await getRandomCatGif(),
@@ -49,6 +49,19 @@ export async function sendAnimation(chatId: string) {
 
   console.log("randomCatGif", JSON.stringify(data));
 
+  const res = await fetch(
+    `${config.TELEGRAM_WEBHOOK_URL}/sendAnimation`,
+    formatApiRequestBody(data),
+  );
+
+  return await res.json();
+}
+
+export async function sendAnimationFromCache(chatId: string, url: string) {
+  const data = JSON.stringify({
+    chat_id: chatId,
+    animation: url,
+  });
 
   const res = await fetch(
     `${config.TELEGRAM_WEBHOOK_URL}/sendAnimation`,
