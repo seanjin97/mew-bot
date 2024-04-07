@@ -31,14 +31,12 @@ function getRandomSearchPrompt(): string {
 
 export async function getRandomCatGif(): Promise<string> {
   const searchPrompt = getRandomSearchPrompt();
-  console.log("PROMPT", searchPrompt);
+
   const res = await fetch(
     `https://api.giphy.com/v1/gifs/search?api_key=${config.GIPHY_API_TOKEN}&q=${searchPrompt}`,
   );
 
   const data = await res.json();
-
-  console.log("allCats", JSON.stringify(data));
 
   return _.sample(data.data).images.original.url;
 }
@@ -50,6 +48,7 @@ export async function sendAnimation(chatId: string) {
   });
 
   console.log("randomCatGif", JSON.stringify(data));
+
 
   const res = await fetch(
     `${config.TELEGRAM_WEBHOOK_URL}/sendAnimation`,
