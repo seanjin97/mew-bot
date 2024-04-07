@@ -1,8 +1,8 @@
 import { sendAnimationFromCache, sendReply } from "../common/utils";
-import { SECRET_CHAT_ID } from "./config";
+import { SECRET_CHAT_ID } from "../common/config";
 import { REMINDER_MESSAGES } from "../common/personality";
 import * as _ from "lodash";
-import { getCatGifUrls } from "../meow/s3";
+import { getCatGifUrls } from "../common/s3";
 
 exports.handler = async function (event: any) {
   console.log("request", JSON.stringify(event, undefined, 2));

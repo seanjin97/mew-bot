@@ -1,6 +1,8 @@
-import { sendCat } from "../common/utils";
-import { getCatGifUrls } from "./s3";
+import { sendCat, sendReply } from "../common/utils";
+import { getCatGifUrls } from "../common/s3";
 import * as _ from "lodash";
+import { SECRET_CHAT_ID } from "../common/config";
+import { SECRET_MESSAGE } from "./config";
 
 let CAT_GIF_URLS: string[];
 
@@ -30,6 +32,8 @@ exports.handler = async function (event: { body: string }) {
     case "/mew@corrupted_mew_bot":
       await sendCat(chatId, randomlyChosenGifUrl);
       break;
+    case "/seansecret":
+      await sendReply(SECRET_CHAT_ID, SECRET_MESSAGE);
   }
 
   return {

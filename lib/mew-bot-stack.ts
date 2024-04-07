@@ -28,6 +28,8 @@ export class MewBotStack extends Stack {
         MEW_BOT_API_TOKEN: config.MEW_BOT_API_TOKEN,
         GIPHY_API_TOKEN: config.GIPHY_API_TOKEN,
         MEWBOT_S3_BUCKET: mewBotCacheBucket.bucketName,
+        SECRET_CHAT_ID: config.SECRET_CHAT_ID,
+        SECRET_MESSAGE: config.SECRET_MESSAGE,
       },
       timeout: cdk.Duration.seconds(3),
     });
