@@ -60,7 +60,7 @@ export class MewBotStack extends Stack {
     mewBotCacheBucket.grantRead(poke);
 
     const rule = new events.Rule(this, "pokeRule", {
-      schedule: events.Schedule.expression("rate(1 minute)"),
+      schedule: events.Schedule.expression("rate(2 hours)"),
     });
 
     rule.addTarget(new targets.LambdaFunction(poke));
