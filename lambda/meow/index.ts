@@ -1,4 +1,4 @@
-import { sendAnimationFromCache, sendReply } from "./utils";
+import { sendCat } from "./utils";
 import { getCatGifUrls } from "./s3";
 import * as _ from "lodash";
 
@@ -7,7 +7,7 @@ let CAT_GIF_URLS: string[];
 getCatGifUrls()
   .then((res) => {
     CAT_GIF_URLS = res;
-    console.log("mewbot cache initialised", CAT_GIF_URLS);
+    console.log("mewbot cache initialised", CAT_GIF_URLS.length);
   })
   .catch((err) => {
     console.log("UNABLE TO INITIALISE MEWBOT", err);
@@ -25,12 +25,10 @@ exports.handler = async function (event: { body: string }) {
 
   switch (command) {
     case "/mew":
-      await sendReply(chatId, "ok cutie, please wait xoxo");
-      await sendAnimationFromCache(chatId, randomlyChosenGifUrl!);
+      await sendCat(chatId, randomlyChosenGifUrl);
       break;
     case "/mew@corrupted_mew_bot":
-      await sendReply(chatId, "ok cutie, please wait xoxo");
-      await sendAnimationFromCache(chatId, randomlyChosenGifUrl);
+      await sendCat(chatId, randomlyChosenGifUrl);
       break;
   }
 
