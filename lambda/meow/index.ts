@@ -13,6 +13,10 @@ exports.handler = async function (event: { body: string }) {
       await sendReply(chatId, "ok cutie, please wait xoxo");
       await sendAnimation(chatId);
       break;
+    case "/gimme@corrupted_mew_bot":
+      await sendReply(chatId, "ok cutie, please wait xoxo");
+      await sendAnimation(chatId);
+      break;
   }
 
   return {
