@@ -7,6 +7,8 @@ import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations
 import * as config from "./config";
 import * as cdk from "aws-cdk-lib";
 import * as s3 from "aws-cdk-lib/aws-s3";
+import * as events from "aws-cdk-lib/aws-events";
+import * as targets from "aws-cdk-lib/aws-events-targets";
 
 export class MewBotStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -27,7 +29,7 @@ export class MewBotStack extends Stack {
         GIPHY_API_TOKEN: config.GIPHY_API_TOKEN,
         MEWBOT_S3_BUCKET: mewBotCacheBucket.bucketName,
       },
-      timeout: cdk.Duration.seconds(10),
+      timeout: cdk.Duration.seconds(3),
     });
 
     mewBotCacheBucket.grantRead(mewBot);
@@ -44,5 +46,23 @@ export class MewBotStack extends Stack {
       methods: [apigwv2.HttpMethod.POST],
       integration: meowIntegration,
     });
+
+    const poke = new lambdaNodeJs.NodejsFunction(this, "pokeHandler", {
+      runtime: Runtime.NODEJS_20_X,
+      entry: "lambda/poke/index.ts",
+      environment: {
+        MEW_BOT_API_TOKEN: config.MEW_BOT_API_TOKEN,
+        MEWBOT_S3_BUCKET: mewBotCacheBucket.bucketName,
+        SECRET_CHAT_ID: config.SECRET_CHAT_ID,
+      },
+    });
+
+    mewBotCacheBucket.grantRead(poke);
+
+    const rule = new events.Rule(this, "pokeRule", {
+      schedule: events.Schedule.expression("rate(1 minute)"),
+    });
+
+    rule.addTarget(new targets.LambdaFunction(poke));
   }
 }

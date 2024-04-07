@@ -1,5 +1,5 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { MEWBOT_S3_BUCKET } from "./config";
+import { MEWBOT_S3_BUCKET } from "../common/config";
 
 export const s3Client = new S3Client({});
 

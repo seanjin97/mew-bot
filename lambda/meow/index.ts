@@ -1,4 +1,4 @@
-import { sendCat } from "./utils";
+import { sendCat } from "../common/utils";
 import { getCatGifUrls } from "./s3";
 import * as _ from "lodash";
 
