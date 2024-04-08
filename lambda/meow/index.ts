@@ -20,6 +20,13 @@ exports.handler = async function (event: { body: string }) {
 
   const messageBody = JSON.parse(event.body);
 
+  if (!messageBody.message) {
+    return {
+      statusCode: 400,
+      headers: { "Content-Type": "text/plain" },
+      body: `No message body to process.`,
+    };
+  }
   const chatId = messageBody.message.chat.id;
   const command = messageBody.message.text;
 
