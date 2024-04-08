@@ -4,17 +4,6 @@ import * as _ from "lodash";
 import { SECRET_CHAT_ID } from "../common/config";
 import { SECRET_MESSAGE } from "./config";
 
-let CAT_GIF_URLS: string[];
-
-getCatGifUrls()
-  .then((res) => {
-    CAT_GIF_URLS = res;
-    console.log("mewbot cache initialised", CAT_GIF_URLS.length);
-  })
-  .catch((err) => {
-    console.log("UNABLE TO INITIALISE MEWBOT", err);
-  });
-
 exports.handler = async function (event: { body: string }) {
   console.log("request", JSON.stringify(event, undefined, 2));
 
@@ -29,6 +18,7 @@ exports.handler = async function (event: { body: string }) {
   }
   const chatId = messageBody.message.chat.id;
   const command = messageBody.message.text;
+  const CAT_GIF_URLS = await getCatGifUrls();
 
   const randomlyChosenGifUrl: string = _.sample(CAT_GIF_URLS)!;
 

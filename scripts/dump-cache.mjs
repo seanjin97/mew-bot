@@ -21,4 +21,4 @@ while (true) {
   }
 }
 
-writeFileSync("output.json", JSON.stringify(output));
+writeFileSync("scripts/output.json", JSON.stringify(output));
