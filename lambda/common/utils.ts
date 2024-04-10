@@ -1,6 +1,6 @@
 import * as config from "./config";
 import * as _ from "lodash";
-import { PROMPT_LIST } from "./config";
+import { CLOUDFRONT_DOMAIN, PROMPT_LIST } from "./config";
 import { WAIT_MESSAGES } from "./personality";
 
 function formatApiRequestBody(data: any): RequestInit {
@@ -83,4 +83,10 @@ export async function sendCat(
     sendReply(chatId, _.sample(WAIT_MESSAGES)!),
     sendAnimationFromCache(chatId, randomlyChosenGifUrl),
   ]);
+}
+
+export async function getCatGifUrls(): Promise<string[]> {
+  const res = await fetch(`${CLOUDFRONT_DOMAIN}/output.json`);
+
+  return await res.json();
 }

@@ -1,10 +1,11 @@
-import { sendCat, sendReply } from "../common/utils";
-import { getCatGifUrls } from "../common/s3";
+import { sendCat, sendReply, getCatGifUrls } from "../common/utils";
 import * as _ from "lodash";
 import { SECRET_CHAT_ID } from "../common/config";
 import { SECRET_MESSAGE } from "./config";
 
-exports.handler = async function (event: { body: string }) {
+const catGifUrls = await getCatGifUrls();
+
+export const handler = async function (event: { body: string }) {
   console.log("request", JSON.stringify(event, undefined, 2));
 
   const messageBody = JSON.parse(event.body);
@@ -18,9 +19,8 @@ exports.handler = async function (event: { body: string }) {
   }
   const chatId = messageBody.message.chat.id;
   const command = messageBody.message.text;
-  const CAT_GIF_URLS = await getCatGifUrls();
 
-  const randomlyChosenGifUrl: string = _.sample(CAT_GIF_URLS)!;
+  const randomlyChosenGifUrl: string = _.sample(catGifUrls)!;
 
   switch (command) {
     case "/mew":
